@@ -46,7 +46,23 @@
   .form-row .hint { font-size: 11px; color: #999; margin-top: 4px; }
 
   .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .main { padding: 0 12px; margin: 16px auto; }
+    .page-header { padding: 20px 12px; }
+    .page-header h1 { font-size: 18px; }
+    .page-header p { font-size: 11px; }
+    .panel-title { padding: 12px 16px; font-size: 14px; }
+    .panel-body { padding: 16px; }
+    .form-row input, .form-row textarea { font-size: 16px; padding: 10px 12px; }
+    .preview-box { padding: 12px; overflow-x: auto; }
+    .btn-copy { width: 100%; text-align: center; padding: 14px; font-size: 16px; }
+    .install-instructions { padding: 14px 16px; }
+    .install-instructions h4 { font-size: 12px; }
+    .install-instructions p { font-size: 12px; }
+    .btn-row { flex-direction: column; }
+    .copy-status { text-align: center; }
+  }
 
   .checkbox-row {
     display: flex; align-items: center; gap: 10px;
@@ -108,11 +124,11 @@
 
   <!-- STEPS -->
   <div style="display: flex; gap: 0; margin-bottom: 24px;">
-    <div id="step1" style="flex: 1; text-align: center; padding: 10px 8px; font-size: 13px; font-weight: bold; color: #1a5276; background: #fff; border-bottom: 3px solid #1a5276; border-radius: 6px 0 0 0; transition: all 0.3s;">
-      <span style="display: inline-block; width: 22px; height: 22px; background: #1a5276; color: #fff; border-radius: 50%; line-height: 22px; font-size: 11px; margin-right: 6px;">1</span> Fill in your info
+    <div id="step1" style="flex: 1; text-align: center; padding: 10px 8px; font-size: 12px; font-weight: bold; color: #1a5276; background: #fff; border-bottom: 3px solid #1a5276; border-radius: 6px 0 0 0; transition: all 0.3s;">
+      <span style="display: inline-block; width: 22px; height: 22px; background: #1a5276; color: #fff; border-radius: 50%; line-height: 22px; font-size: 11px; margin-right: 4px;">1</span> Your Info
     </div>
-    <div id="step2" style="flex: 1; text-align: center; padding: 10px 8px; font-size: 13px; font-weight: bold; color: #999; background: #f0f3f6; border-bottom: 3px solid transparent; border-radius: 0 6px 0 0; transition: all 0.3s;">
-      <span style="display: inline-block; width: 22px; height: 22px; background: #ddd; color: #fff; border-radius: 50%; line-height: 22px; font-size: 11px; margin-right: 6px;">2</span> Copy &amp; Paste into Outlook
+    <div id="step2" style="flex: 1; text-align: center; padding: 10px 8px; font-size: 12px; font-weight: bold; color: #999; background: #f0f3f6; border-bottom: 3px solid transparent; border-radius: 0 6px 0 0; transition: all 0.3s;">
+      <span style="display: inline-block; width: 22px; height: 22px; background: #ddd; color: #fff; border-radius: 50%; line-height: 22px; font-size: 11px; margin-right: 4px;">2</span> Copy &amp; Paste
     </div>
   </div>
 
