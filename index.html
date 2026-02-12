@@ -202,20 +202,25 @@
     <div class="panel-body">
 
       <p class="preview-label">💻 DESKTOP</p>
-      <div class="preview-box" id="previewDesktop" style="margin-bottom: 16px;">
+      <div class="preview-box" id="previewDesktop" style="margin-bottom: 8px;">
         <p style="color:#ccc; font-style: italic; text-align: center; padding: 40px 20px;">Start typing above to see your signature...</p>
+      </div>
+      <div class="btn-row" style="margin-bottom: 20px;">
+        <button class="btn-copy" id="copyBtnDesktop" onclick="copySignature('desktop')">💻 Copy Desktop Signature</button>
+        <span class="copy-status" id="copyStatusDesktop">&#10003; Copied! Now paste into Outlook</span>
       </div>
 
       <p class="preview-label">📱 MOBILE &amp; TABLET</p>
-      <div class="preview-box" id="previewMobile">
+      <div class="preview-box" id="previewMobile" style="margin-bottom: 8px;">
         <p style="color:#ccc; font-style: italic; text-align: center; padding: 40px 20px;">Start typing above to see your signature...</p>
       </div>
-
-      <div id="copySource" style="position: absolute; left: -9999px; top: -9999px;"></div>
       <div class="btn-row">
-        <button class="btn-copy" id="copyBtn" onclick="copySignature()">Copy Signature</button>
-        <span class="copy-status" id="copyStatus">&#10003; Copied! Now paste into Outlook</span>
+        <button class="btn-copy" id="copyBtnMobile" onclick="copySignature('mobile')">📱 Copy Mobile Signature</button>
+        <span class="copy-status" id="copyStatusMobile">&#10003; Copied! Now paste into Outlook</span>
       </div>
+
+      <div id="copySourceDesktop" style="position: absolute; left: -9999px; top: -9999px;"></div>
+      <div id="copySourceMobile" style="position: absolute; left: -9999px; top: -9999px;"></div>
     </div>
   </div>
 
@@ -481,10 +486,11 @@ function updatePreview() {
   document.getElementById("previewDesktop").innerHTML = desktopSig;
   document.getElementById("previewMobile").innerHTML = mobileSig;
 
-  document.getElementById("copySource").innerHTML = desktopSig;
+  document.getElementById("copySourceDesktop").innerHTML = desktopSig;
+  document.getElementById("copySourceMobile").innerHTML = mobileSig;
 }
 
-function copySignature() {
+function copySignature(type) {
   const selectedLine = document.querySelector('input[name="directLine"]:checked');
   const hint = document.getElementById("phoneHint");
   if (!selectedLine) {
@@ -493,7 +499,8 @@ function copySignature() {
   }
   hint.style.display = "none";
 
-  const copySource = document.getElementById("copySource");
+  const sourceId = type === 'mobile' ? 'copySourceMobile' : 'copySourceDesktop';
+  const copySource = document.getElementById(sourceId);
   if (!copySource.innerHTML.trim()) return;
 
   const range = document.createRange();
@@ -505,7 +512,6 @@ function copySignature() {
   try {
     document.execCommand("copy");
   } catch (e) {
-    // Fallback: try clipboard API
     const html = copySource.innerHTML;
     const blob = new Blob([html], {type: "text/html"});
     navigator.clipboard.write([new ClipboardItem({"text/html": blob})]).catch(() => {});
@@ -513,16 +519,16 @@ function copySignature() {
 
   sel.removeAllRanges();
 
-  const btn = document.getElementById("copyBtn");
-  const status = document.getElementById("copyStatus");
+  const btn = document.getElementById(type === 'mobile' ? 'copyBtnMobile' : 'copyBtnDesktop');
+  const status = document.getElementById(type === 'mobile' ? 'copyStatusMobile' : 'copyStatusDesktop');
+  const originalText = btn.textContent;
   btn.classList.add("copied");
   btn.textContent = "Copied!";
   status.classList.add("show");
 
-
   setTimeout(() => {
     btn.classList.remove("copied");
-    btn.textContent = "Copy Signature";
+    btn.textContent = originalText;
     status.classList.remove("show");
   }, 3000);
 }
