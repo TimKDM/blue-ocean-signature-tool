@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <title>Blue Ocean Group — Email Signature Generator</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -62,6 +63,13 @@
     .install-instructions p { font-size: 12px; }
     .btn-row { flex-direction: column; }
     .copy-status { text-align: center; }
+  }
+  @media (max-width: 380px) {
+    .mobile-websites-inline { display: none !important; }
+    .mobile-websites-stacked { display: block !important; }
+    .mobile-bog-separator { display: none !important; }
+    .mobile-bog-inline { display: none !important; }
+    .mobile-bog-stacked { display: block !important; }
   }
 
   .checkbox-row {
@@ -192,15 +200,27 @@
   <div class="panel">
     <div class="panel-title">Live Preview</div>
     <div class="panel-body">
-      <p class="preview-label">YOUR SIGNATURE</p>
-      <div class="preview-box" id="previewBox">
+
+      <p class="preview-label">💻 DESKTOP</p>
+      <div class="preview-box" id="previewDesktop" style="margin-bottom: 8px;">
         <p style="color:#ccc; font-style: italic; text-align: center; padding: 40px 20px;">Start typing above to see your signature...</p>
       </div>
-      <div id="copySource" style="position: absolute; left: -9999px; top: -9999px;"></div>
-      <div class="btn-row">
-        <button class="btn-copy" id="copyBtn" onclick="copySignature()">Copy Signature</button>
-        <span class="copy-status" id="copyStatus">&#10003; Copied! Now paste into Outlook</span>
+      <div class="btn-row" style="margin-bottom: 20px;">
+        <button class="btn-copy" id="copyBtnDesktop" onclick="copySignature('desktop')">💻 Copy Desktop Signature</button>
+        <span class="copy-status" id="copyStatusDesktop">&#10003; Copied! Now paste into Outlook</span>
       </div>
+
+      <p class="preview-label">📱 MOBILE &amp; TABLET</p>
+      <div class="preview-box" id="previewMobile" style="margin-bottom: 8px;">
+        <p style="color:#ccc; font-style: italic; text-align: center; padding: 40px 20px;">Start typing above to see your signature...</p>
+      </div>
+      <div class="btn-row">
+        <button class="btn-copy" id="copyBtnMobile" onclick="copySignature('mobile')">📱 Copy Mobile Signature</button>
+        <span class="copy-status" id="copyStatusMobile">&#10003; Copied! Now paste into Outlook</span>
+      </div>
+
+      <div id="copySourceDesktop" style="position: absolute; left: -9999px; top: -9999px;"></div>
+      <div id="copySourceMobile" style="position: absolute; left: -9999px; top: -9999px;"></div>
     </div>
   </div>
 
@@ -282,11 +302,14 @@ function updatePreview() {
   }
 
   if (!name && !title && !phone && !email) {
-    document.getElementById("previewBox").innerHTML = '<p style="color:#ccc; font-style: italic; text-align: center; padding: 40px 20px;">Start typing above to see your signature...</p>';
+    const emptyMsg = '<p style="color:#ccc; font-style: italic; text-align: center; padding: 40px 20px;">Start typing above to see your signature...</p>';
+    document.getElementById("previewDesktop").innerHTML = emptyMsg;
+    document.getElementById("previewMobile").innerHTML = emptyMsg;
     return;
   }
 
   let linkedinBlock = "";
+  let linkedinBlockMobile = "";
   if (showLI && linkedin) {
     linkedinBlock = `
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top: 6px;">
@@ -296,10 +319,29 @@ function updatePreview() {
               <table role="presentation" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td style="width: 18px; height: 18px; background-color: #0077B5; border-radius: 3px; text-align: center; vertical-align: middle; line-height: 18px;">
-                    <span style="color: #ffffff; font-size: 11px; font-weight: bold; font-family: Arial, sans-serif;">in</span>
+                    <span style="color: #ffffff; font-size: 11px; font-weight: bold; font-family: 'Poppins', Arial, sans-serif;">in</span>
                   </td>
                   <td style="padding-left: 6px; vertical-align: middle;">
-                    <span style="font-size: 11px; color: #0077B5; font-family: Arial, sans-serif;">Connect with me on LinkedIn</span>
+                    <span style="font-size: 11px; color: #0077B5; font-family: 'Poppins', Arial, sans-serif;">Connect with me on LinkedIn</span>
+                  </td>
+                </tr>
+              </table>
+            </a>
+          </td>
+        </tr>
+      </table>`;
+    linkedinBlockMobile = `
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 6px 0 0 0;">
+        <tr>
+          <td style="vertical-align: middle;">
+            <a href="${linkedin}" target="_blank" style="text-decoration: none;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="width: 18px; height: 18px; background-color: #0077B5; border-radius: 3px; text-align: center; vertical-align: middle; line-height: 18px;">
+                    <span style="color: #ffffff; font-size: 11px; font-weight: bold; font-family: 'Poppins', Arial, sans-serif;">in</span>
+                  </td>
+                  <td style="padding-left: 6px; vertical-align: middle;">
+                    <span style="font-size: 11px; color: #0077B5; font-family: 'Poppins', Arial, sans-serif;">Connect with me on LinkedIn</span>
                   </td>
                 </tr>
               </table>
@@ -314,174 +356,148 @@ function updatePreview() {
         &ldquo;${quote}&rdquo;
       </p>` : '';
 
-  const isMobile = window.innerWidth < 500;
-
-  let sigHTML;
-
-  if (isMobile) {
-    // Stacked layout for mobile preview
-    sigHTML = `
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, Helvetica, sans-serif; width: 100%; border-collapse: collapse;">
+  // Desktop layout
+  const desktopSig = `
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="font-family: 'Poppins', Arial, Helvetica, sans-serif; max-width: 600px; width: 600px; border-collapse: collapse;">
   <tr>
-    <td style="text-align: center;">
-      <p style="margin: 0 0 2px 0; font-size: 17px; font-weight: bold; color: #1a1a1a; letter-spacing: 0.3px; line-height: 1.2;">${name || "[Your Name]"}</p>
+    <td style="vertical-align: middle; padding-left: 8px; padding-right: 10px;">
+      <a href="http://www.blueoceantea.com" target="_blank" style="text-decoration: none;">
+        <img src="${LOGO_URI}"
+             alt="Blue Ocean Group"
+             width="120" height="120"
+             style="width: 120px; height: 120px; display: block; border: 0;" />
+      </a>
+    </td>
+    <td style="width: 2px; background-color: #1a5276; font-size: 0; line-height: 0;" width="2">&nbsp;</td>
+    <td style="vertical-align: top; padding-left: 8px;">
+      <p style="margin: 0 0 2px 0; font-family: 'Montserrat', Arial, sans-serif; font-size: 17px; font-weight: 600; color: #1a1a1a; letter-spacing: 0.3px; line-height: 1.2;">${name || "[Your Name]"}</p>
       <p style="margin: 0 0 8px 0; font-size: 12px; color: #1a5276; letter-spacing: 0.3px; line-height: 1.3;">${title || "[Your Title]"}</p>
-      <p style="margin: 0 0 6px 0; font-size: 12px; font-weight: bold; color: #1a5276; letter-spacing: 0.5px; line-height: 1.2;">
-        BLUE OCEAN GROUP
-        <span style="font-weight: normal; color: #999999; font-size: 10px; letter-spacing: 1px;">&nbsp;&bull; TEA &bull; NUTRITION &bull; INNOVATION</span>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 8px;">
+        <tr><td style="width: 40px; height: 1px; background-color: #1a5276; font-size: 0; line-height: 0;">&nbsp;</td></tr>
+      </table>
+      <p style="margin: 0 0 6px 0; font-family: 'Montserrat', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #1a5276; letter-spacing: 0.5px; line-height: 1.2;">BLUE OCEAN GROUP<span style="font-weight: 600; color: #666666; font-size: 10px; letter-spacing: 1px; font-family: 'Montserrat', Arial, sans-serif;"> &bull; TEA &bull; NUTRITION &bull; INNOVATION</span></p>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="font-size: 12px; color: #555555; line-height: 1.6;">
+        <tr>
+          <td style="padding-right: 6px; color: #1a5276; font-size: 12px; font-weight: bold;">P:</td>
+          <td><a href="tel:${phoneTel}" style="color: #555555; text-decoration: none;">${phone || "[Select Direct Line]"}</a></td>
+          ${cellPhone ? `<td style="padding: 0 8px; color: #cccccc;">|</td>
+          <td style="padding-right: 6px; color: #1a5276; font-size: 12px; font-weight: bold;">C:</td>
+          <td><a href="tel:${cellTel}" style="color: #555555; text-decoration: none;">${cellPhone}</a></td>` : ''}
+          <td style="padding: 0 8px; color: #cccccc;">|</td>
+          <td style="padding-right: 6px; color: #1a5276; font-size: 12px; font-weight: bold;">E:</td>
+          <td><a href="mailto:${email}" style="color: #555555; text-decoration: none;">${email || "[Email]"}</a></td>
+        </tr>
+      </table>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="font-size: 12px; color: #555555; line-height: 1.6;">
+        <tr>
+          <td style="padding-right: 6px; color: #1a5276; font-size: 12px; font-weight: bold;">W:</td>
+          <td>
+            <a href="http://www.blueoceantea.com" style="color: #1a5276; text-decoration: none;">blueoceantea.com</a>
+            <span style="color: #cccccc;"> &nbsp;|&nbsp; </span>
+            <a href="http://www.divineingredients.com" style="color: #1a5276; text-decoration: none;">divineingredients.com</a>
+            <span style="color: #cccccc;"> &nbsp;|&nbsp; </span>
+            <a href="http://www.oatoftheordinary.com" style="color: #1a5276; text-decoration: none;">oatoftheordinary.com</a>
+          </td>
+        </tr>
+      </table>
+      ${quoteBlock}
+      ${linkedinBlock}
+    </td>
+  </tr>
+</table>`;
+
+  // Mobile/tablet stacked layout (stacks to vertical if > 500px not available)
+  const mobileSig = `
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="font-family: 'Poppins', Arial, Helvetica, sans-serif; width: 100%; max-width: 500px; border-collapse: collapse; ">
+  <tr>
+    <td style="text-align: left;">
+      <p style="margin: 0 0 3px 0; font-family: 'Montserrat', Arial, sans-serif; font-size: 16px; font-weight: 600; color: #1a1a1a; letter-spacing: 0.3px; line-height: 1.2;">${name || "[Your Name]"}</p>
+      <p style="margin: 0 0 5px 0; font-size: 11px; color: #1a5276; letter-spacing: 0.3px; line-height: 1.3;">${title || "[Your Title]"} <span class="mobile-bog-separator" style="color: #cccccc;">|</span> <span class="mobile-bog-inline" style="font-family: 'Montserrat', Arial, sans-serif; font-weight: 700; letter-spacing: 0.5px;">BLUE OCEAN GROUP</span><span class="mobile-bog-stacked" style="display: none; font-family: 'Montserrat', Arial, sans-serif; font-weight: 700; letter-spacing: 0.5px;">BLUE OCEAN GROUP</span></p>
+      <p style="margin: 0 0 6px 0; font-family: 'Montserrat', Arial, sans-serif; font-size: 9px; color: #666666; font-weight: 600; letter-spacing: 1px; line-height: 1.3;">TEA &bull; NUTRITION &bull; INNOVATION</p>
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align: left; padding: 2px 0;">
+      ${cellPhone ? `
+      <p style="margin: 3px 0; font-size: 11px; color: #555555; line-height: 1.6;">
+        <span style="color: #1a5276; font-weight: bold;">P:</span> <a href="tel:${phoneTel}" style="color: #555555; text-decoration: none;">${phone || "[Phone]"}</a> <span style="color: #cccccc;">|</span> <span style="color: #1a5276; font-weight: bold;">C:</span> <a href="tel:${cellTel}" style="color: #555555; text-decoration: none;">${cellPhone}</a>
       </p>
-      <p style="margin: 4px 0; font-size: 12px; color: #555555; line-height: 1.8;">
-        <span style="color: #1a5276; font-weight: bold;">P:</span> <a href="tel:${phoneTel}" style="color: #555555; text-decoration: none;">${phone || "[Select Direct Line]"}</a>
-        ${cellPhone ? `<span style="color: #cccccc;"> | </span><span style="color: #1a5276; font-weight: bold;">C:</span> <a href="tel:${cellTel}" style="color: #555555; text-decoration: none;">${cellPhone}</a>` : ''}
-      </p>
-      <p style="margin: 2px 0; font-size: 12px; color: #555555; line-height: 1.8;">
+      <p style="margin: 3px 0; font-size: 11px; color: #555555; line-height: 1.6;">
         <span style="color: #1a5276; font-weight: bold;">E:</span> <a href="mailto:${email}" style="color: #555555; text-decoration: none;">${email || "[Email]"}</a>
-      </p>
-      <p style="margin: 2px 0; font-size: 12px; line-height: 1.8;">
-        <span style="color: #1a5276; font-weight: bold;">W:</span>
+      </p>` : `
+      <p style="margin: 3px 0; font-size: 11px; color: #555555; line-height: 1.6;">
+        <span style="color: #1a5276; font-weight: bold;">P:</span> <a href="tel:${phoneTel}" style="color: #555555; text-decoration: none;">${phone || "[Phone]"}</a> <span style="color: #cccccc;">|</span> <span style="color: #1a5276; font-weight: bold;">E:</span> <a href="mailto:${email}" style="color: #555555; text-decoration: none;">${email || "[Email]"}</a>
+      </p>`}
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align: left; padding: 6px 0;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+        <tr><td style="width: 40px; height: 1px; background-color: #1a5276; font-size: 0; line-height: 0;">&nbsp;</td></tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">
+      ${quoteBlock && quote.length <= 40 ? `
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td style="vertical-align: middle; padding-right: 10px;">
+            <a href="http://www.blueoceantea.com" target="_blank" style="text-decoration: none;">
+              <img src="${LOGO_URI}"
+                   alt="Blue Ocean Group"
+                   width="65" height="65"
+                   style="width: 65px; height: 65px; display: block; border: 0;" />
+            </a>
+          </td>
+          <td style="vertical-align: middle; text-align: left;">
+            ${quoteBlock}
+          </td>
+        </tr>
+      </table>` : quoteBlock ? `
+      <a href="http://www.blueoceantea.com" target="_blank" style="text-decoration: none;">
+        <img src="${LOGO_URI}"
+             alt="Blue Ocean Group"
+             width="65" height="65"
+             style="width: 65px; height: 65px; display: inline-block; border: 0;" />
+      </a>
+      ${quoteBlock}` : `
+      <a href="http://www.blueoceantea.com" target="_blank" style="text-decoration: none;">
+        <img src="${LOGO_URI}"
+             alt="Blue Ocean Group"
+             width="65" height="65"
+             style="width: 65px; height: 65px; display: inline-block; border: 0;" />
+      </a>`}
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align: left; padding-top: 6px;">
+      <p class="mobile-websites-inline" style="margin: 0; font-size: 11px; line-height: 1.6;">
         <a href="http://www.blueoceantea.com" style="color: #1a5276; text-decoration: none;">blueoceantea.com</a>
         <span style="color: #cccccc;"> | </span>
         <a href="http://www.divineingredients.com" style="color: #1a5276; text-decoration: none;">divineingredients.com</a>
         <span style="color: #cccccc;"> | </span>
         <a href="http://www.oatoftheordinary.com" style="color: #1a5276; text-decoration: none;">oatoftheordinary.com</a>
       </p>
-      ${linkedinBlock}
-      ${quoteBlock}
-    </td>
-  </tr>
-  <tr>
-    <td style="text-align: center; padding-top: 12px;">
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin: 0 auto;">
-        <tr><td style="width: 40px; height: 2px; background-color: #1a5276; font-size: 0; line-height: 0;">&nbsp;</td></tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td style="text-align: center; padding-top: 10px;">
-      <a href="http://www.blueoceantea.com" target="_blank" style="text-decoration: none;">
-        <img src="${LOGO_URI}"
-             alt="Blue Ocean Group"
-             width="100" height="100"
-             style="width: 100px; height: 100px; display: inline-block; border: 0;" />
-      </a>
+      <div class="mobile-websites-stacked" style="display: none; font-size: 11px; line-height: 2;">
+        <a href="http://www.blueoceantea.com" style="color: #1a5276; text-decoration: none;">blueoceantea.com</a><br />
+        <a href="http://www.divineingredients.com" style="color: #1a5276; text-decoration: none;">divineingredients.com</a><br />
+        <a href="http://www.oatoftheordinary.com" style="color: #1a5276; text-decoration: none;">oatoftheordinary.com</a>
+      </div>
+      ${linkedinBlockMobile}
     </td>
   </tr>
 </table>`;
-  } else {
-    // Standard horizontal layout for desktop/email
-    sigHTML = `
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, Helvetica, sans-serif; max-width: 600px; width: 600px; border-collapse: collapse;">
-  <tr>
-    <td style="vertical-align: middle; padding-left: 8px; padding-right: 10px;">
-      <a href="http://www.blueoceantea.com" target="_blank" style="text-decoration: none;">
-        <img src="${LOGO_URI}"
-             alt="Blue Ocean Group"
-             width="120" height="120"
-             style="width: 120px; height: 120px; display: block; border: 0;" />
-      </a>
-    </td>
-    <td style="width: 2px; background-color: #1a5276; font-size: 0; line-height: 0;" width="2">&nbsp;</td>
-    <td style="vertical-align: top; padding-left: 8px;">
-      <p style="margin: 0 0 2px 0; font-size: 17px; font-weight: bold; color: #1a1a1a; letter-spacing: 0.3px; line-height: 1.2;">${name || "[Your Name]"}</p>
-      <p style="margin: 0 0 8px 0; font-size: 12px; color: #1a5276; letter-spacing: 0.3px; line-height: 1.3;">${title || "[Your Title]"}</p>
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 8px;">
-        <tr><td style="width: 40px; height: 1px; background-color: #1a5276; font-size: 0; line-height: 0;">&nbsp;</td></tr>
-      </table>
-      <p style="margin: 0 0 6px 0; font-size: 12px; font-weight: bold; color: #1a5276; letter-spacing: 0.5px; line-height: 1.2;">
-        BLUE OCEAN GROUP
-        <span style="font-weight: normal; color: #999999; font-size: 10px; letter-spacing: 1px;">&nbsp;&bull; TEA &bull; NUTRITION &bull; INNOVATION</span>
-      </p>
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="font-size: 12px; color: #555555; line-height: 1.6;">
-        <tr>
-          <td style="padding-right: 6px; color: #1a5276; font-size: 12px; font-weight: bold;">P:</td>
-          <td><a href="tel:${phoneTel}" style="color: #555555; text-decoration: none;">${phone || "[Select Direct Line]"}</a></td>
-          ${cellPhone ? `<td style="padding: 0 8px; color: #cccccc;">|</td>
-          <td style="padding-right: 6px; color: #1a5276; font-size: 12px; font-weight: bold;">C:</td>
-          <td><a href="tel:${cellTel}" style="color: #555555; text-decoration: none;">${cellPhone}</a></td>` : ''}
-          <td style="padding: 0 8px; color: #cccccc;">|</td>
-          <td style="padding-right: 6px; color: #1a5276; font-size: 12px; font-weight: bold;">E:</td>
-          <td><a href="mailto:${email}" style="color: #555555; text-decoration: none;">${email || "[Email]"}</a></td>
-        </tr>
-      </table>
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="font-size: 12px; color: #555555; line-height: 1.6;">
-        <tr>
-          <td style="padding-right: 6px; color: #1a5276; font-size: 12px; font-weight: bold;">W:</td>
-          <td>
-            <a href="http://www.blueoceantea.com" style="color: #1a5276; text-decoration: none;">blueoceantea.com</a>
-            <span style="color: #cccccc;"> &nbsp;|&nbsp; </span>
-            <a href="http://www.divineingredients.com" style="color: #1a5276; text-decoration: none;">divineingredients.com</a>
-            <span style="color: #cccccc;"> &nbsp;|&nbsp; </span>
-            <a href="http://www.oatoftheordinary.com" style="color: #1a5276; text-decoration: none;">oatoftheordinary.com</a>
-          </td>
-        </tr>
-      </table>
-      ${linkedinBlock}
-      ${quoteBlock}
-    </td>
-  </tr>
-</table>`;
-  }
 
-  // Render directly into preview and hidden copy source
-  // Preview shows responsive layout, copy source always uses desktop layout for email
-  document.getElementById("previewBox").innerHTML = sigHTML;
+  // Render both previews
+  document.getElementById("previewDesktop").innerHTML = desktopSig;
+  document.getElementById("previewMobile").innerHTML = mobileSig;
 
-  // Always build desktop version for copying into Outlook
-  const desktopHTML = `
-<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, Helvetica, sans-serif; max-width: 600px; width: 600px; border-collapse: collapse;">
-  <tr>
-    <td style="vertical-align: middle; padding-left: 8px; padding-right: 10px;">
-      <a href="http://www.blueoceantea.com" target="_blank" style="text-decoration: none;">
-        <img src="${LOGO_URI}"
-             alt="Blue Ocean Group"
-             width="120" height="120"
-             style="width: 120px; height: 120px; display: block; border: 0;" />
-      </a>
-    </td>
-    <td style="width: 2px; background-color: #1a5276; font-size: 0; line-height: 0;" width="2">&nbsp;</td>
-    <td style="vertical-align: top; padding-left: 8px;">
-      <p style="margin: 0 0 2px 0; font-size: 17px; font-weight: bold; color: #1a1a1a; letter-spacing: 0.3px; line-height: 1.2;">${name || "[Your Name]"}</p>
-      <p style="margin: 0 0 8px 0; font-size: 12px; color: #1a5276; letter-spacing: 0.3px; line-height: 1.3;">${title || "[Your Title]"}</p>
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 8px;">
-        <tr><td style="width: 40px; height: 1px; background-color: #1a5276; font-size: 0; line-height: 0;">&nbsp;</td></tr>
-      </table>
-      <p style="margin: 0 0 6px 0; font-size: 12px; font-weight: bold; color: #1a5276; letter-spacing: 0.5px; line-height: 1.2;">
-        BLUE OCEAN GROUP
-        <span style="font-weight: normal; color: #999999; font-size: 10px; letter-spacing: 1px;">&nbsp;&bull; TEA &bull; NUTRITION &bull; INNOVATION</span>
-      </p>
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="font-size: 12px; color: #555555; line-height: 1.6;">
-        <tr>
-          <td style="padding-right: 6px; color: #1a5276; font-size: 12px; font-weight: bold;">P:</td>
-          <td><a href="tel:${phoneTel}" style="color: #555555; text-decoration: none;">${phone || "[Select Direct Line]"}</a></td>
-          ${cellPhone ? `<td style="padding: 0 8px; color: #cccccc;">|</td>
-          <td style="padding-right: 6px; color: #1a5276; font-size: 12px; font-weight: bold;">C:</td>
-          <td><a href="tel:${cellTel}" style="color: #555555; text-decoration: none;">${cellPhone}</a></td>` : ''}
-          <td style="padding: 0 8px; color: #cccccc;">|</td>
-          <td style="padding-right: 6px; color: #1a5276; font-size: 12px; font-weight: bold;">E:</td>
-          <td><a href="mailto:${email}" style="color: #555555; text-decoration: none;">${email || "[Email]"}</a></td>
-        </tr>
-      </table>
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="font-size: 12px; color: #555555; line-height: 1.6;">
-        <tr>
-          <td style="padding-right: 6px; color: #1a5276; font-size: 12px; font-weight: bold;">W:</td>
-          <td>
-            <a href="http://www.blueoceantea.com" style="color: #1a5276; text-decoration: none;">blueoceantea.com</a>
-            <span style="color: #cccccc;"> &nbsp;|&nbsp; </span>
-            <a href="http://www.divineingredients.com" style="color: #1a5276; text-decoration: none;">divineingredients.com</a>
-            <span style="color: #cccccc;"> &nbsp;|&nbsp; </span>
-            <a href="http://www.oatoftheordinary.com" style="color: #1a5276; text-decoration: none;">oatoftheordinary.com</a>
-          </td>
-        </tr>
-      </table>
-      ${linkedinBlock}
-      ${quoteBlock}
-    </td>
-  </tr>
-</table>`;
-  document.getElementById("copySource").innerHTML = desktopHTML;
+  document.getElementById("copySourceDesktop").innerHTML = desktopSig;
+  document.getElementById("copySourceMobile").innerHTML = mobileSig;
 }
 
-function copySignature() {
+function copySignature(type) {
   const selectedLine = document.querySelector('input[name="directLine"]:checked');
   const hint = document.getElementById("phoneHint");
   if (!selectedLine) {
@@ -490,7 +506,8 @@ function copySignature() {
   }
   hint.style.display = "none";
 
-  const copySource = document.getElementById("copySource");
+  const sourceId = type === 'mobile' ? 'copySourceMobile' : 'copySourceDesktop';
+  const copySource = document.getElementById(sourceId);
   if (!copySource.innerHTML.trim()) return;
 
   const range = document.createRange();
@@ -502,7 +519,6 @@ function copySignature() {
   try {
     document.execCommand("copy");
   } catch (e) {
-    // Fallback: try clipboard API
     const html = copySource.innerHTML;
     const blob = new Blob([html], {type: "text/html"});
     navigator.clipboard.write([new ClipboardItem({"text/html": blob})]).catch(() => {});
@@ -510,16 +526,16 @@ function copySignature() {
 
   sel.removeAllRanges();
 
-  const btn = document.getElementById("copyBtn");
-  const status = document.getElementById("copyStatus");
+  const btn = document.getElementById(type === 'mobile' ? 'copyBtnMobile' : 'copyBtnDesktop');
+  const status = document.getElementById(type === 'mobile' ? 'copyStatusMobile' : 'copyStatusDesktop');
+  const originalText = btn.textContent;
   btn.classList.add("copied");
   btn.textContent = "Copied!";
   status.classList.add("show");
 
-
   setTimeout(() => {
     btn.classList.remove("copied");
-    btn.textContent = "Copy Signature";
+    btn.textContent = originalText;
     status.classList.remove("show");
   }, 3000);
 }
