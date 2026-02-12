@@ -400,8 +400,8 @@ function updatePreview() {
           </td>
         </tr>
       </table>
-      ${quoteBlock}
       ${linkedinBlock}
+      ${quoteBlock}
     </td>
   </tr>
 </table>`;
@@ -431,10 +431,20 @@ function updatePreview() {
     </td>
   </tr>
   <tr>
-    <td style="text-align: left; padding: 6px 0;">
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0">
-        <tr><td style="width: 40px; height: 1px; background-color: #1a5276; font-size: 0; line-height: 0;">&nbsp;</td></tr>
-      </table>
+    <td style="text-align: left; padding-top: 6px;">
+      <p class="mobile-websites-inline" style="margin: 0; font-size: 11px; line-height: 1.6;">
+        <a href="http://www.blueoceantea.com" style="color: #1a5276; text-decoration: none;">blueoceantea.com</a>
+        <span style="color: #cccccc;"> | </span>
+        <a href="http://www.divineingredients.com" style="color: #1a5276; text-decoration: none;">divineingredients.com</a>
+        <span style="color: #cccccc;"> | </span>
+        <a href="http://www.oatoftheordinary.com" style="color: #1a5276; text-decoration: none;">oatoftheordinary.com</a>
+      </p>
+      <div class="mobile-websites-stacked" style="display: none; font-size: 11px; line-height: 2;">
+        <a href="http://www.blueoceantea.com" style="color: #1a5276; text-decoration: none;">blueoceantea.com</a><br />
+        <a href="http://www.divineingredients.com" style="color: #1a5276; text-decoration: none;">divineingredients.com</a><br />
+        <a href="http://www.oatoftheordinary.com" style="color: #1a5276; text-decoration: none;">oatoftheordinary.com</a>
+      </div>
+      ${linkedinBlockMobile}
     </td>
   </tr>
   <tr>
@@ -468,23 +478,6 @@ function updatePreview() {
              width="65" height="65"
              style="width: 65px; height: 65px; display: inline-block; border: 0;" />
       </a>`}
-    </td>
-  </tr>
-  <tr>
-    <td style="text-align: left; padding-top: 6px;">
-      <p class="mobile-websites-inline" style="margin: 0; font-size: 11px; line-height: 1.6;">
-        <a href="http://www.blueoceantea.com" style="color: #1a5276; text-decoration: none;">blueoceantea.com</a>
-        <span style="color: #cccccc;"> | </span>
-        <a href="http://www.divineingredients.com" style="color: #1a5276; text-decoration: none;">divineingredients.com</a>
-        <span style="color: #cccccc;"> | </span>
-        <a href="http://www.oatoftheordinary.com" style="color: #1a5276; text-decoration: none;">oatoftheordinary.com</a>
-      </p>
-      <div class="mobile-websites-stacked" style="display: none; font-size: 11px; line-height: 2;">
-        <a href="http://www.blueoceantea.com" style="color: #1a5276; text-decoration: none;">blueoceantea.com</a><br />
-        <a href="http://www.divineingredients.com" style="color: #1a5276; text-decoration: none;">divineingredients.com</a><br />
-        <a href="http://www.oatoftheordinary.com" style="color: #1a5276; text-decoration: none;">oatoftheordinary.com</a>
-      </div>
-      ${linkedinBlockMobile}
     </td>
   </tr>
 </table>`;
