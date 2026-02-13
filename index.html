@@ -246,7 +246,7 @@
 </div>
 
 <script>
-const LOGO_URI = "https://raw.githubusercontent.com/TimKDM/blue-ocean-signature-tool/main/BOG-logo-cropped-email-v3.png";
+const LOGO_URI = "https://raw.githubusercontent.com/TimKDM/blue-ocean-signature-tool/main/BOG-logo-horizontal.png";
 
 const PHONE_US = "+1 360-656-6686";
 const PHONE_CA = "+1 778-785-0088";
@@ -363,26 +363,26 @@ function updatePreview() {
         &ldquo;${quote}&rdquo;${quoteBy ? `<br /><span style="font-style: normal; font-weight: 600; color: #888888;">&mdash; ${quoteBy}</span>` : ''}
       </p>` : '';
 
-  // Desktop layout
+  // Desktop layout — horizontal logo on top, content below
   const desktopSig = `
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="font-family: 'Poppins', Arial, Helvetica, sans-serif; max-width: 600px; width: 600px; border-collapse: collapse;">
   <tr>
-    <td width="120" height="120" style="vertical-align: middle; padding-left: 8px; padding-right: 10px; width: 120px; height: 120px;">
+    <td style="padding-bottom: 10px;">
       <a href="http://www.blueoceantea.com" target="_blank" style="text-decoration: none;">
         <img src="${LOGO_URI}"
              alt="Blue Ocean Group"
-             width="120" height="120"
-             style="width: 120px; height: 120px; min-height: 120px; display: block; border: 0;" />
+             width="400"
+             style="width: 400px; height: auto; display: block; border: 0;" />
       </a>
     </td>
-    <td style="width: 2px; background-color: #1a5276; font-size: 0; line-height: 0;" width="2">&nbsp;</td>
-    <td style="vertical-align: top; padding-left: 8px;">
+  </tr>
+  <tr>
+    <td style="padding-top: 10px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 8px;">
+        <tr><td style="width: 400px; height: 2px; background-color: #1a5276; font-size: 0; line-height: 0;">&nbsp;</td></tr>
+      </table>
       <p style="margin: 0 0 2px 0; font-family: 'Montserrat', Arial, sans-serif; font-size: 17px; font-weight: 600; color: #1a1a1a; letter-spacing: 0.3px; line-height: 1.2;">${name || "[Your Name]"}</p>
       <p style="margin: 0 0 8px 0; font-size: 12px; color: #1a5276; letter-spacing: 0.3px; line-height: 1.3;">${title || "[Your Title]"}</p>
-      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 8px;">
-        <tr><td style="width: 40px; height: 1px; background-color: #1a5276; font-size: 0; line-height: 0;">&nbsp;</td></tr>
-      </table>
-      <p style="margin: 0 0 6px 0; font-family: 'Montserrat', Arial, sans-serif; font-size: 12px; font-weight: 700; color: #1a5276; letter-spacing: 0.5px; line-height: 1.2;">BLUE OCEAN GROUP<span style="font-weight: 600; color: #666666; font-size: 10px; letter-spacing: 1px; font-family: 'Montserrat', Arial, sans-serif;"> &bull; TEA &bull; NUTRITION &bull; INNOVATION</span></p>
       ${cellPhone ? `
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="font-size: 12px; color: #555555; line-height: 1.6;">
         <tr>
@@ -426,24 +426,26 @@ function updatePreview() {
   </tr>
 </table>`;
 
-  // Mobile/tablet layout (logo | divider | all content stacked, quote below)
+  // Mobile layout — same structure, scaled down
   const mobileSig = `
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="font-family: 'Poppins', Arial, Helvetica, sans-serif; max-width: 500px; width: 100%; border-collapse: collapse;">
   <tr>
-    <td width="80" height="80" style="vertical-align: middle; padding-left: 4px; padding-right: 8px; width: 80px; height: 80px;">
+    <td style="padding-bottom: 8px;">
       <a href="http://www.blueoceantea.com" target="_blank" style="text-decoration: none;">
         <img src="${LOGO_URI}"
              alt="Blue Ocean Group"
-             width="80" height="80"
-             style="width: 80px; height: 80px; min-height: 80px; display: block; border: 0;" />
+             width="280"
+             style="width: 280px; height: auto; display: block; border: 0;" />
       </a>
     </td>
-    <td style="width: 2px; background-color: #1a5276; font-size: 0; line-height: 0;" width="2">&nbsp;</td>
-    <td style="vertical-align: top; padding-left: 8px;">
+  </tr>
+  <tr>
+    <td style="padding-top: 8px;">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 6px;">
+        <tr><td style="width: 280px; height: 2px; background-color: #1a5276; font-size: 0; line-height: 0;">&nbsp;</td></tr>
+      </table>
       <p style="margin: 0 0 1px 0; font-family: 'Montserrat', Arial, sans-serif; font-size: 14px; font-weight: 600; color: #1a1a1a; letter-spacing: 0.3px; line-height: 1.2;">${name || "[Your Name]"}</p>
-      <p style="margin: 0 0 3px 0; font-size: 10px; color: #1a5276; letter-spacing: 0.3px; line-height: 1.3;">${title || "[Your Title]"}</p>
-      <p style="margin: 0 0 2px 0; font-family: 'Montserrat', Arial, sans-serif; font-size: 10px; font-weight: 700; color: #1a5276; letter-spacing: 0.5px; line-height: 1.2;">BLUE OCEAN GROUP</p>
-      <p style="margin: 0 0 3px 0; font-family: 'Montserrat', Arial, sans-serif; font-size: 8px; color: #666666; font-weight: 600; letter-spacing: 1px; line-height: 1.3;">TEA &bull; NUTRITION &bull; INNOVATION</p>
+      <p style="margin: 0 0 6px 0; font-size: 10px; color: #1a5276; letter-spacing: 0.3px; line-height: 1.3;">${title || "[Your Title]"}</p>
       <p style="margin: 0; font-size: 10px; color: #555555; line-height: 1.5;">
         <span style="color: #1a5276; font-weight: bold;">P:</span> <a href="tel:${phoneTel}" style="color: #555555; text-decoration: none;">${phone || "[Select Direct Line]"}</a>${cellPhone ? ` <span style="color: #cccccc;">|</span> <span style="color: #1a5276; font-weight: bold;">C:</span> <a href="tel:${cellTel}" style="color: #555555; text-decoration: none;">${cellPhone}</a>` : ''}
       </p>
@@ -459,10 +461,10 @@ function updatePreview() {
         <a href="http://www.oatoftheordinary.com" style="color: #1a5276; text-decoration: none;">oatoftheordinary.com</a>
       </p>
       ${linkedinBlockMobile}
+      ${quoteBlock}
     </td>
   </tr>
-</table>
-${quoteBlock}`;
+</table>`;
 
   // Render both previews
   document.getElementById("previewDesktop").innerHTML = desktopSig;
