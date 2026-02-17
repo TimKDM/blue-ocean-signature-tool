@@ -65,8 +65,7 @@
   }
 
   @media (max-width: 495px) {
-    .linkedin-wrap { display: block !important; margin-top: 2px; }
-    .linkedin-wrap > span:first-child { display: none !important; }
+    .sig-li-sep { display: none !important; }
   }
 
   @media (max-width: 430px) {
@@ -80,8 +79,8 @@
     /* Quote wraps naturally */
     .sig-quote { white-space: normal !important; }
     /* Logo grows to stay balanced as text wraps to more lines */
-    .sig-logo-cell { width: 80px !important; min-width: 80px !important; }
-    .sig-logo { width: 80px !important; height: 80px !important; min-width: 80px !important; }
+    .sig-logo-cell { width: 110px !important; min-width: 110px !important; }
+    .sig-logo { width: 110px !important; height: 110px !important; min-width: 110px !important; }
   }
 
   @media (max-width: 375px) {
@@ -91,8 +90,8 @@
     .sig-bog { font-size: 11px !important; }
     .sig-bog-tagline { font-size: 9px !important; }
     /* Logo grows further to match taller wrapped content */
-    .sig-logo-cell { width: 90px !important; min-width: 90px !important; }
-    .sig-logo { width: 90px !important; height: 90px !important; min-width: 90px !important; }
+    .sig-logo-cell { width: 120px !important; min-width: 120px !important; }
+    .sig-logo { width: 120px !important; height: 120px !important; min-width: 120px !important; }
   }
 
   .checkbox-row {
@@ -328,22 +327,18 @@ function updatePreview() {
         </tr>
       </table>` : '';
 
-  // Website + LinkedIn row
-  const linkedinInline = showLI && linkedin ? `<span class="linkedin-wrap" style="white-space: nowrap;"> <span style="color: #cccccc;">&nbsp;|&nbsp;</span><table role="presentation" cellpadding="0" cellspacing="0" border="0" style="display: inline-table; vertical-align: middle;">
-              <tr>
-                <td style="width: 18px; height: 18px; background-color: #0077B5; border-radius: 3px; text-align: center; vertical-align: middle; line-height: 18px;">
-                  <a href="${linkedin}" target="_blank" style="text-decoration: none; color: #ffffff; font-size: 12px; font-weight: bold; font-family: Arial, sans-serif;">in</a>
-                </td>
-                <td style="padding-left: 6px; vertical-align: middle; white-space: nowrap;">
-                  <a href="${linkedin}" target="_blank" style="text-decoration: none; font-size: 12px; color: #0077B5; font-family: Arial, sans-serif;">Connect with me on LinkedIn</a>
-                </td>
-              </tr>
-            </table></span>` : '';
-
+  // Website + LinkedIn row — flat table row for Outlook compatibility
   const websiteLinkedinRow = `
       <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="font-size: 13px; color: #555555; line-height: 1.6;">
         <tr>
-          <td><span style="white-space: nowrap;"><span style="color: #1a5276; font-weight: bold;">W:</span>&nbsp;<a href="http://www.blueoceantea.com" style="color: #1a5276; text-decoration: none;">blueoceantea.com</a></span>${linkedinInline}</td>
+          <td style="white-space: nowrap;"><span style="color: #1a5276; font-weight: bold;">W:</span>&nbsp;<a href="http://www.blueoceantea.com" style="color: #1a5276; text-decoration: none;">blueoceantea.com</a></td>
+          ${showLI && linkedin ? `<td class="sig-li-sep" style="padding: 0 6px; color: #cccccc; white-space: nowrap;">|</td>
+          <td style="width: 18px; height: 18px; white-space: nowrap;">
+            <a href="${linkedin}" target="_blank" style="text-decoration: none; display: inline-block; width: 18px; height: 18px; background-color: #0077B5; border-radius: 3px; text-align: center; vertical-align: middle; line-height: 18px; color: #ffffff; font-size: 12px; font-weight: bold; font-family: Arial, sans-serif;">in</a>
+          </td>
+          <td style="padding-left: 6px; vertical-align: middle; white-space: nowrap;">
+            <a href="${linkedin}" target="_blank" style="text-decoration: none; font-size: 12px; color: #0077B5; font-family: Arial, sans-serif;">Connect with me on LinkedIn</a>
+          </td>` : ''}
         </tr>
       </table>`;
 
@@ -369,9 +364,9 @@ function updatePreview() {
   const signature = `
 <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="font-family: Arial, Helvetica, sans-serif; max-width: 600px; width: 100%; border-collapse: collapse;">
   <tr>
-    <td class="sig-logo-cell" width="70" style="vertical-align: middle; padding-right: 12px; width: 70px; min-width: 70px;">
+    <td class="sig-logo-cell" width="100" style="vertical-align: middle; padding-right: 12px; width: 100px; min-width: 100px;">
       <a href="http://www.blueoceantea.com" target="_blank" style="text-decoration: none;">
-        <img class="sig-logo" src="${ICON_URI}" alt="Blue Ocean Group" width="70" height="70" style="width: 70px; min-width: 70px; height: 70px; display: block; border: 0;" />
+        <img class="sig-logo" src="${ICON_URI}" alt="Blue Ocean Group" width="100" height="100" style="width: 100px; min-width: 100px; height: 100px; display: block; border: 0;" />
       </a>
     </td>
     <td style="vertical-align: top; padding-left: 12px; border-left: 2px solid #1a5276;">
